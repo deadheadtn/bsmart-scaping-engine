@@ -59,11 +59,31 @@ def content():
     array= []
     url= request.args.get('url')
     response = requests.get(url)
+    titletag= request.args.get('titletag')
+    imagetag= request.args.get('imagetag')
+    reftag= request.args.get('reftag')
+    desctag= request.args.get('desctag')
     soup = BeautifulSoup(response.text, "html.parser")
-    array.append(soup.find(id=request.args.get('title')))
-    array.append(soup.find(id=request.args.get('ref')).text)
-    array.append(soup.find(id=request.args.get('image'))['src'])
-    array.append(soup.find(id=request.args.get('desc')).text)
+    if(titletag=='id'):
+        array.append(soup.find(id=request.args.get('title')))
+    elif(titletag=='h1'):
+        array.append(soup.findAll('h1')[0].text.strip())
+    elif(titletag=='h2'):
+        array.append(soup.findAll('h2')[0].text.strip())
+    else:
+        array.append(soup.findAll("div", {"class": request.args.get('title')}))
+    if(reftag=='id'):
+        array.append(soup.find(id=request.args.get('ref')).text)
+    else:
+        array.append(soup.findAll("div", {"class": request.args.get('ref')}))
+    if(imagetag=='id'):
+        array.append(soup.find(id=request.args.get('image'))['src'])
+    else:
+        array.append(soup.findAll("div", {"class": request.args.get('image')})['src'])
+    if(desctag=='id'):
+        array.append(soup.find(id=request.args.get('desc')))
+    else:
+        array.append(soup.findAll("div", {"class": request.args.get('desc')}))
     return render_template('content.html',len=len(array),soup=array)
 
 
