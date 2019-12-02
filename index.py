@@ -62,6 +62,7 @@ def content():
     url1= request.args.get('url')
     pageurl= request.args.get('pageurl')
     pageN= int(request.args.get('pagen'))
+    prodlink= request.args.get('prodlink')
     print pageN
     if (pageN>1):
         for i in range(1,pageN):
@@ -69,7 +70,7 @@ def content():
             #print fullurl
             response = requests.get(fullurl)
             soup = BeautifulSoup(response.text, "html.parser")
-            for a in soup.findAll('a', {'class': 'product-name'}):
+            for a in soup.findAll('a', {'class': prodlink}):
                 array1.append( a['href'])
     else:
         response = requests.get(url1)

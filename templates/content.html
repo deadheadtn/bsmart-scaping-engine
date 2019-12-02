@@ -13,9 +13,10 @@
 <body>
   <ul class="list-group">
     {%for i in range(0, len)%}
-    {%for j in range(0, 4)%}
-    <li class="list-group-item">{{listprod[i][j]}}</li>
-    {%endfor%}
+    <li class="list-group-item">Title: {{listprod[i][0]}}</li>
+    <li class="list-group-item">Ref: {{listprod[i][1]}}</li>
+    <li class="list-group-item">Image: <img alt="Smiley face" height="100" src="{{listprod[i][2]}}"></li>
+    <li class="list-group-item">Desc: {{listprod[i][3]}}</li>
     {%endfor%}
 
   </ul>
