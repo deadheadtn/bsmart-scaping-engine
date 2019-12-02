@@ -130,7 +130,7 @@
     <li class="list-group-item">Title: {{listprod[i][0]}}</li>
     <li class="list-group-item">Ref: {{listprod[i][1]}}</li>
     <li class="list-group-item">Image: <img alt="Smiley face" height="100" src="{{listprod[i][2]}}"></li>
-    <li class="list-group-item">Desc: {{listprod[i][3]}}</li>
+    <li class="list-group-item">Desc: {{listprod[i][3]|safe}}</li>
     {%endfor%}
 
   </ul>
