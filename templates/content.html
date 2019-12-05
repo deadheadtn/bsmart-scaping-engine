@@ -124,6 +124,34 @@
     </div>
     <div class="container">
       <div class="row">
+        Category:
+        <select class="form-control" name='category'>
+          {%for i in range(0, lenc)%}
+          <option value="{{cat[i]._id}}">{{cat[i].name}}
+          </option>
+          {%endfor%}
+        </select>
+        SubCategory:
+        <select class="form-control" name='subcategory'>
+          {%for i in range(0, lenc)%}
+          <optgroup label="{{cat[i].name}}">
+            {% for segment in cat[i].subCatagories %}
+            <option value="{{segment}}">{{segment}}</option>
+            {%endfor%}
+          </optgroup>
+          {%endfor%}
+        </select>
+        Provider
+        <select class="form-control" name='provider'>
+          {%for i in range(0, lenp)%}
+            <option value="{{provider[i]._id}}">{{provider[i].name}}</option>
+            {%endfor%}
+        </select>
+
+      </div>
+      <br>
+      <br>
+      <br>
         <div class="col-sm">
   <ul class="list-group">
     {%for i in range(0, len)%}

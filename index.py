@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect , url_for
 import flask_login
 import requests
 import time
+import json
+import urllib2
 from bs4 import BeautifulSoup
 
 app=Flask(__name__)
@@ -55,10 +57,18 @@ def query_example():
     return render_template('grabbed.html',len= len(array), array = array)
 
 
-@app.route('/searchcontent', methods=['GET'])
+@app.route('/searchcontent', methods=['GET','POST'])
 def content():
     listprod= []
     array1= []
+    req = urllib2.Request('https://api.bsmart.tn/categories')
+    opener = urllib2.build_opener()
+    f = opener.open(req)
+    jsoncat = json.loads(f.read())
+    req = urllib2.Request('https://api.bsmart.tn/providerslist')
+    opener = urllib2.build_opener()
+    f = opener.open(req)
+    jsonproviders = json.loads(f.read())
     url1= request.args.get('url')
     pageurl= request.args.get('pageurl')
     pageN= int(request.args.get('pagen'))
@@ -107,7 +117,7 @@ def content():
         else:
             prod.append(soup.findAll("div", {"class": request.args.get('desc')}))
         listprod.append(prod)
-    return render_template('content.html',len=len(listprod),listprod=listprod)
+    return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
 
 
 
