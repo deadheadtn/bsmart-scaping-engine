@@ -124,6 +124,7 @@
     </div>
     <div class="container">
       <div class="row">
+        <form method="post">
         Category:
         <select class="form-control" name='category'>
           {%for i in range(0, lenc)%}
@@ -147,8 +148,12 @@
             <option value="{{provider[i]._id}}">{{provider[i].name}}</option>
             {%endfor%}
         </select>
-
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill  btn-shadow-blue" value="GET">
+        </div>
+        <form>
       </div>
+
       <br>
       <br>
       <br>
