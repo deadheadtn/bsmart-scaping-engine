@@ -23,26 +23,29 @@ data1= []
 
 for a in data:
     url= a['url']
-    file= str(url).split("/o/")
-    if file[1].split(".") is not None:
-        ext1= file[1].split(".")
-        if ext1[1].split("?")[0] is not None:
-            ext= ext1[1].split("?")[0]
-            if file[1].split("&token=") is not None:
-                ff= file[1].split("&token=")
-                download(url)
-                a['image']= download(url)
-                a.pop('wasted', None)
-                a.pop('ctgr', None)
-                a.pop('role', None)
-                a.pop('user', None)
-                a['created_at']=11111
-                if a.get('desc') is  None:
-                    a['description'] = ''
-                else:
-                    a['description']= a.get('desc').encode("utf-8")
-                a.pop('desc', None)
-                data1.append(a)
+    print url
+    type(url)
+    if not url is None:
+        file= str(url).split("/o/")
+        if not file[1].split(".") is None:
+            ext1= file[1].split(".")
+            if ext1[1].split("?")[0] is not None:
+                ext= ext1[1].split("?")[0]
+                if file[1].split("&token=") is not None:
+                    ff= file[1].split("&token=")
+                    download(url)
+                    a['image']= download(url)
+                    a.pop('wasted', None)
+                    a.pop('ctgr', None)
+                    a.pop('role', None)
+                    a.pop('user', None)
+                    a['created_at']=11111
+                    if a.get('desc') is  None:
+                        a['description'] = ''
+                    else:
+                        a['description']= a.get('desc').encode("utf-8")
+                    a.pop('desc', None)
+                    data1.append(a)
     else:
         exit()
 jsonFile = open("../Providers_array1.json", "w+")
