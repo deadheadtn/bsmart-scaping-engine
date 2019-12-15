@@ -28,7 +28,7 @@ for a in data:
         print type(url)
         if not url is '':
             file= str(url).split("/o/")
-            if not file[1].split(".") is None:
+            if file[1] is not  None:
                 ext1= file[1].split(".")
                 if ext1[1].split("?")[0] is not None:
                     ext= ext1[1].split("?")[0]
