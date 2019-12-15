@@ -13,6 +13,7 @@ def download(url):
     r = requests.get(url, headers=headers)
     open(path, 'wb').write(r.content)
     aa= {'path' : 'providers/'+filename, 'name': filename}
+    print aa
     return aa
 
 with open('../Providers_array.json') as json_file:
@@ -24,8 +25,6 @@ data1= []
 for a in data:
     if not a.get('url') is  None:
         url= a['url']
-        print url
-        print type(url)
         if not url is '':
             file= str(url).split("/o/")
             if len(file) > 1:
