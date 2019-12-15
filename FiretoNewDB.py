@@ -22,7 +22,7 @@ json_file.close()
 data1= []
 
 for a in data:
-    if a['url'] is not None:
+    if not a.get('url') is  None:
         url= a['url']
         print url
         print type(url)
@@ -32,7 +32,7 @@ for a in data:
                 ext1= file[1].split(".")
                 if len(ext1) > 1:
                     ext= ext1[1].split("?")[0]
-                    if len(file[1].split("&token=")>1):
+                    if len(file[1].split("&token="))> 1:
                         ff= file[1].split("&token=")
                         download(url)
                         a['image']= download(url)
