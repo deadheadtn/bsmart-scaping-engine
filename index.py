@@ -40,7 +40,6 @@ def query_example():
     pageurl= request.args.get('pageurl')
     pageN= int(request.args.get('pagen'))
     prodlink = request.args.get('prodlink')
-    print pageN
     if (pageN>1):
         for i in range(1,pageN):
             fullurl=url+pageurl+str(i)
@@ -74,7 +73,6 @@ def content():
         pageurl= request.args.get('pageurl')
         pageN= int(request.args.get('pagen'))
         prodlink= request.args.get('prodlink')
-        print pageN
         if (pageN>1):
             for i in range(1,pageN):
                 fullurl=url1+pageurl+str(i)
@@ -190,4 +188,4 @@ def content():
 
 
 if __name__ =='__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
