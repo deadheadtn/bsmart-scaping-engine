@@ -28,11 +28,11 @@ for a in data:
         print type(url)
         if not url is '':
             file= str(url).split("/o/")
-            if file[1] is not  None:
+            if len(file) > 1:
                 ext1= file[1].split(".")
-                if ext1[1].split("?")[0] is not None:
+                if len(ext1) > 1:
                     ext= ext1[1].split("?")[0]
-                    if file[1].split("&token=") is not None:
+                    if len(file[1].split("&token=")>1):
                         ff= file[1].split("&token=")
                         download(url)
                         a['image']= download(url)
