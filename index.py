@@ -189,7 +189,7 @@ def content():
                 prod.append(soup.findAll("div", {"class": request.args.get('desc')}).text)
             listprod.append(prod)
         #return render_template('content.html',len=len(listprod),listprod=listprod)
-            imaage=download(str(prod[2]))
+            imaage=download(prod[2])
             #jsonprod= {"name": str(prod[0])}
             jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": prod[3],"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
             print jsonprod
