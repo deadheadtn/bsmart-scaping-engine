@@ -68,7 +68,7 @@ def download(url):
     headers = {'user-agent': 'test-app/0.0.1'}
     r = requests.get(url, headers=headers)
     open(path, 'wb').write(r.content)
-    aa= {'path' : 'products/'+ext, 'name': ext}
+    aa= [{'path' : 'products/'+ext, 'name': ext}]
     return aa
 
 @app.route('/searchcontent', methods=['GET','POST'])
