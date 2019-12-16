@@ -6,6 +6,7 @@ import requests
 import time
 import json
 import urllib2
+import pymongo
 from bs4 import BeautifulSoup
 
 app=Flask(__name__)
@@ -144,14 +145,6 @@ def content():
         cat = request.form['category']
         subcat= request.form['subcategory']
         provider = request.form['provider']
-        req = urllib2.Request('https://api.bsmart.tn/categories')
-        opener = urllib2.build_opener()
-        f = opener.open(req)
-        jsoncat = json.loads(f.read())
-        req = urllib2.Request('https://api.bsmart.tn/providerslist')
-        opener = urllib2.build_opener()
-        f = opener.open(req)
-        jsonproviders = json.loads(f.read())
         url1= request.args.get('url')
         pageurl= request.args.get('pageurl')
         pageN= int(request.args.get('pagen'))
