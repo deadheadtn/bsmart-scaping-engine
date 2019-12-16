@@ -186,16 +186,20 @@ def content():
             if(desctag=='id'):
                 prod.append(soup.find(id=request.args.get('desc')))
             else:
+<<<<<<< HEAD
                 prod.append(soup.findAll('div',{'class':'rte align_justify'})[0].text.strip())
+=======
+                prod.append(soup.findAll('div',{'class':  request.args.get('desc')})[0].text)
+>>>>>>> 7d9938398f878d10e683e614f053ebb8674fc811
             listprod.append(prod)
         #return render_template('content.html',len=len(listprod),listprod=listprod)
             imaage=download(prod[2])
             #jsonprod= {"name": str(prod[0])}
-            jsonprod= {"name": str(prod[0]),"reference": prod[1], "images": imaage ,"description": prod[3],"providers": [str(provider)], "category": [str(cat)],"subcategory": [str(subcat)]}
+            jsonprod= {"name": str(prod[0].encode("utf-8")),"reference": str(prod[1]), "images": imaage ,"description": str(prod[3].encode("utf-8")) ,"providers": [str(provider)], "category": [str(cat)],"subcategory": [str(subcat)]}
             print jsonprod
             x = db.products.insert_one(jsonprod)
             print x
-        return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
+        return render_template('home.html')
 
 
 if __name__ =='__main__':
