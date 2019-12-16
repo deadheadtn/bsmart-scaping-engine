@@ -77,6 +77,7 @@ def content():
     myclient = pymongo.MongoClient('mongodb://seif:test1234@51.77.147.246/')
     mydb = myclient['bsmart2']
     mycol = mydb["products"]
+    print(mydb.list_collection_names())
     if request.method == "GET":
         listprod= []
         array1= []
