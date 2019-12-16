@@ -76,8 +76,8 @@ def download(url):
 def content():
     uri = "mongodb://%s:%s@%s" % ("seif", "test1234", "51.77.147.246")
     myclient = pymongo.MongoClient(uri)
-    mydb = myclient["bsmart2"]
-    mycol = mydb["products"]
+    db = myclient.user
+
     if request.method == "GET":
         listprod= []
         array1= []
@@ -189,13 +189,13 @@ def content():
             if(desctag=='id'):
                 prod.append(soup.find(id=request.args.get('desc')))
             else:
-                prod.append(soup.findAll("div", {"class": request.args.get('desc')}))
+                prod.append(soup.findAll("div", {"class": request.args.get('desc')}).text)
             listprod.append(prod)
         #return render_template('content.html',len=len(listprod),listprod=listprod)
             imaage=download(str(prod[2]))
             jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": prod[3],"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
             print jsonprod
-            x = mycol.insert_one(jsonprod)
+            x = db.user.insert_one(jsonprod)
             print x
         return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
 
