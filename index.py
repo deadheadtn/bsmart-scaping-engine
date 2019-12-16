@@ -69,7 +69,6 @@ def download(url):
     r = requests.get(url, headers=headers)
     open(path, 'wb').write(r.content)
     aa= {'path' : 'products/'+ext, 'name': ext}
-    print aa
     return aa
 
 @app.route('/searchcontent', methods=['GET','POST'])
@@ -191,8 +190,8 @@ def content():
             listprod.append(prod)
         #return render_template('content.html',len=len(listprod),listprod=listprod)
             imaage=download(str(prod[2]))
-            jsonprod= {"name": str(prod[0])}
-            #jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": '',"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
+            #jsonprod= {"name": str(prod[0])}
+            jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": str(prod[3].encode("utf-8")),"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
             print jsonprod
             x = db.products.insert_one(jsonprod)
             print x
