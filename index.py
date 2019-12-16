@@ -75,7 +75,7 @@ def download(url):
 
 @app.route('/searchcontent', methods=['GET','POST'])
 def content():
-    uri = "mongodb://%s:%s@%s" % (quote_plus("seif"), quote_plus("test1234"), "51.77.147.246")
+    uri = "mongodb://%s:%s@%s" % ("seif", "test1234", "51.77.147.246")
     myclient = pymongo.MongoClient(uri)
     mydb = myclient["bsmart2"]
     mycol = mydb["products"]
