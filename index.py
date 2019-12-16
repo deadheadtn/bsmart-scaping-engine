@@ -74,10 +74,9 @@ def download(url):
 
 @app.route('/searchcontent', methods=['GET','POST'])
 def content():
-    uri = "mongodb://%s:%s@%s" % ("seif", "test1234", "51.77.147.246")
-    myclient = pymongo.MongoClient(uri)
-    db = myclient.bsmart
-
+    myclient = pymongo.MongoClient('mongodb://seif:test1234@51.77.147.246/')
+    mydb = myclient['bsmart2']
+    mycol = mydb["products"]
     if request.method == "GET":
         listprod= []
         array1= []
@@ -196,7 +195,7 @@ def content():
             jsonprod= {"name": str(prod[0])}
             #jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": '',"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
             print jsonprod
-            x = db.products.insert_one(jsonprod)
+            x = mycol.insert_one(jsonprod)
             print x
         return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
 
