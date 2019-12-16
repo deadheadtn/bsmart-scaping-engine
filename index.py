@@ -193,7 +193,8 @@ def content():
             listprod.append(prod)
         #return render_template('content.html',len=len(listprod),listprod=listprod)
             imaage=download(str(prod[2]))
-            jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": '',"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
+            jsonprod= {"name": str(prod[0])}
+            #jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": '',"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
             print jsonprod
             x = db.products.insert_one(jsonprod)
             print x
