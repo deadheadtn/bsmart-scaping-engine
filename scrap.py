@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 array= []
 insertion = []
 for i in range(2,6):
-    url =  'https://www.venetacucine.com/fr/fournitures?page='+str(i)
+    url =  'http://www.comaf.tn/103-robinetterie.html'+str(i)
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
     for a in soup.findAll('a', href=True):

@@ -50,3 +50,6 @@ for a in data:
 jsonFile = open("../Providers_array1.json", "w+")
 jsonFile.write(json.dumps(data1))
 jsonFile.close()
+
+
+/usr/bin/mongoimport --username  seif --password test1234 --host 51.77.147.246 --db bsmart2  --collection providers --jsonArray --file Providers_array1.json
