@@ -136,8 +136,8 @@
         <select class="form-control" name='subcategory'>
           {%for i in range(0, lenc)%}
           <optgroup label="{{cat[i].name}}">
-            {% for segment in cat[i].subCatagories %}
-            <option value="{{segment}}">{{segment}}</option>
+            {% for segment in cat[i].subcategory %}
+            <option value="{{segment._id}}">{{segment.name}}</option>
             {%endfor%}
           </optgroup>
           {%endfor%}

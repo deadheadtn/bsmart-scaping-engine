@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from flask import Flask, render_template, request, redirect , url_for
 import flask_login
 import requests
@@ -55,17 +57,34 @@ def query_example():
             array.append( a['href'])
     return render_template('grabbed.html',len= len(array), array = array)
 
+def download(url):
+    print('Beginning file download with urllib2...')
+    file= str(url).split("/o/")
+    ext1= file[1].split(".")
+    ext= ext1[1].split("?")[0]
+    ff= file[1].split("&token=")
+    filename=ff[1]+'.'+ext
+    path= str('/var/www/bsmart_admin/server/uploads/products/')+str(filename)
+    headers = {'user-agent': 'test-app/0.0.1'}
+    r = requests.get(url, headers=headers)
+    open(path, 'wb').write(r.content)
+    aa= {'path' : 'products/'+filename, 'name': filename}
+    print aa
+    return aa
 
 @app.route('/searchcontent', methods=['GET','POST'])
 def content():
+    myclient = pymongo.MongoClient("mongodb://seif:test1234@51.77.147.246/")
+    mydb = myclient["bsmart2"]
+    mycol = mydb["products"]
     if request.method == "GET":
         listprod= []
         array1= []
-        req = urllib2.Request('https://api.bsmart.tn/categories')
+        req = urllib2.Request('https://api.bsmart.tn/api/category')
         opener = urllib2.build_opener()
         f = opener.open(req)
         jsoncat = json.loads(f.read())
-        req = urllib2.Request('https://api.bsmart.tn/providerslist')
+        req = urllib2.Request('https://api.bsmart.tn/api/provider')
         opener = urllib2.build_opener()
         f = opener.open(req)
         jsonproviders = json.loads(f.read())
@@ -104,9 +123,9 @@ def content():
             else:
                 prod.append(soup.findAll("div", {"class": request.args.get('title')}))
             if(reftag=='id'):
-                prod.append(soup.find(id=request.args.get('ref')).text)
+                prod.append(soup.find(id=request.args.get('ref')).text.split(' ')[3])
             else:
-                prod.append(soup.findAll("div", {"class": request.args.get('ref')}))
+                prod.append(soup.findAll("div", {"class": request.args.get('ref')}).split(' ')[3])
             if(imagetag=='id'):
                 prod.append(soup.find(id=request.args.get('image'))['src'])
             else:
@@ -116,8 +135,9 @@ def content():
             else:
                 prod.append(soup.findAll("div", {"class": request.args.get('desc')}))
             listprod.append(prod)
+
         #return render_template('content.html',len=len(listprod),listprod=listprod)
-        return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
+        return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat['categories']),cat=jsoncat['categories'],lenp=len(jsonproviders['providers']),provider=jsonproviders['providers'])
     else:
         listprod= []
         array1= []
@@ -166,9 +186,9 @@ def content():
             else:
                 prod.append(soup.findAll("div", {"class": request.args.get('title')}))
             if(reftag=='id'):
-                prod.append(soup.find(id=request.args.get('ref')).text)
+                prod.append(soup.find(id=request.args.get('ref')).text.split(' ')[3])
             else:
-                prod.append(soup.findAll("div", {"class": request.args.get('ref')}))
+                prod.append(soup.findAll("div", {"class": request.args.get('ref')}).split(' ')[3])
             if(imagetag=='id'):
                 prod.append(soup.find(id=request.args.get('image'))['src'])
             else:
@@ -176,14 +196,12 @@ def content():
             if(desctag=='id'):
                 prod.append(soup.find(id=request.args.get('desc')))
             else:
-                prod.append(soup.findAll("div", {"class": request.args.get('desc')})[0].text.strip())
+                prod.append(soup.findAll("div", {"class": request.args.get('desc')}))
             listprod.append(prod)
         #return render_template('content.html',len=len(listprod),listprod=listprod)
-            jsonprod= {"name": str(prod[0]),"ref": prod[1].encode('utf-8'), "image": str(prod[2]) ,"desc": prod[3],"provider": str(provider), "Category": str(cat),"SubCategory": str(subcat)}
-            print (jsonprod)
-            r = requests.post('https://api.bsmart.tn/productslist', json=jsonprod)
-            print(r.content)
-            print(r.status_code)
+            imaage=download(str(prod[2]))
+            jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": prod[3],"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
+            x = mycol.insert_one(jsonprod)
         return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
 
 
