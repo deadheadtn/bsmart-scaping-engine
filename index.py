@@ -63,8 +63,7 @@ def download(url):
     print 'Beginning file download with urllib2...'
     ext1= url.split(".")
     filename= hashlib.md5(url).hexdigest()
-    ext=filename+ext1[len(ext1)-1]
-
+    ext=filename+"."+ext1[len(ext1)-1]
     path= str('/var/www/bsmart_admin/server/uploads/products/')+str(ext)
     headers = {'user-agent': 'test-app/0.0.1'}
     r = requests.get(url, headers=headers)
@@ -197,6 +196,7 @@ def content():
             jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": prod[3],"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
             print jsonprod
             x = mycol.insert_one(jsonprod)
+            print x
         return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
 
 
