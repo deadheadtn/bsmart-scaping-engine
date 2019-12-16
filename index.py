@@ -7,6 +7,7 @@ import time
 import json
 import urllib2
 import pymongo
+import hashlib
 from bs4 import BeautifulSoup
 
 app=Flask(__name__)
@@ -59,17 +60,16 @@ def query_example():
     return render_template('grabbed.html',len= len(array), array = array)
 
 def download(url):
-    print('Beginning file download with urllib2...')
-    file= str(url).split("/o/")
-    ext1= file[1].split(".")
-    ext= ext1[1].split("?")[0]
-    ff= file[1].split("&token=")
-    filename=ff[1]+'.'+ext
-    path= str('/var/www/bsmart_admin/server/uploads/products/')+str(filename)
+    print 'Beginning file download with urllib2...'
+    ext1= url.split(".")
+    filename= hashlib.md5(url).hexdigest()
+    ext=filename+ext1[len(ext1)-1]
+
+    path= str('/var/www/bsmart_admin/server/uploads/products/')+str(ext)
     headers = {'user-agent': 'test-app/0.0.1'}
     r = requests.get(url, headers=headers)
     open(path, 'wb').write(r.content)
-    aa= {'path' : 'products/'+filename, 'name': filename}
+    aa= {'path' : 'products/'+ext, 'name': ext}
     print aa
     return aa
 
@@ -194,6 +194,7 @@ def content():
         #return render_template('content.html',len=len(listprod),listprod=listprod)
             imaage=download(str(prod[2]))
             jsonprod= {"name": str(prod[0]),"reference": prod[1], "image": imaage ,"description": prod[3],"providers": str(provider), "category": str(cat),"subcategory": str(subcat)}
+            print jsoncat
             x = mycol.insert_one(jsonprod)
         return render_template('content.html',len=len(listprod),listprod=listprod,lenc=len(jsoncat),cat=jsoncat,lenp=len(jsonproviders),provider=jsonproviders)
 
