@@ -174,56 +174,90 @@ def content():
         url1= request.args.get('url')
         pageurl= request.args.get('pageurl')
         pageN= int(request.args.get('pagen'))
+        sitetype= request.args.get('sitetype')
         prodlink= request.args.get('prodlink')
-        if (pageN>1):
-            for i in range(1,pageN):
-                fullurl=url1+pageurl+str(i)
-                response = requests.get(fullurl)
+        if sitetype=="comaf" :
+            if (pageN>1):
+                for i in range(1,pageN):
+                    fullurl=url1+pageurl+str(i)
+                    #print fullurl
+                    response = requests.get(fullurl)
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    for a in soup.findAll('a', {'class': "product-name"}):
+                        array1.append( a['href'])
+            else:
+                response = requests.get(url1)
                 soup = BeautifulSoup(response.text, "html.parser")
-                for a in soup.findAll('a', {'class': prodlink}):
+                for a in soup.findAll('a', {'class': "product-name"}):
                     array1.append( a['href'])
+            for url in array1:
+                prod= []
+                response = requests.get(url)
+                soup = BeautifulSoup(response.text, "html.parser")
+                name=soup.findAll('h1')[0].text.strip()
+                ref=soup.findAll('span', {'class': 'editable'})[0].text
+                image=soup.findAll('img', {'id': 'bigpic'})[0]['src']
+                desc=soup.findAll('div',{'class':'rte align_justify'})[0].text.strip()
+                prod.append(name)
+                prod.append(ref)
+                prod.append(image)
+                prod.append(desc)
+                imaage=download(prod[2])
+                #jsonprod= {"name": str(prod[0])}
+                jsonprod= {"name": str(prod[0].encode("utf-8")),"reference": str(prod[1]), "images": imaage ,"description": str(prod[3].encode("utf-8")) ,"providers": [str(provider)], "category": [str(cat)],"subcategory": [str(subcat)]}
+                print jsonprod
+                x = db.products.insert_one(jsonprod)
+                print x
         else:
-            response = requests.get(url1)
-            soup = BeautifulSoup(response.text, "html.parser")
-            for a in soup.findAll('a', {'class': 'product-name'}):
-                array1.append( a['href'])
+            if (pageN>1):
+                for i in range(1,pageN):
+                    fullurl=url1+pageurl+str(i)
+                    response = requests.get(fullurl)
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    for a in soup.findAll('a', {'class': prodlink}):
+                        array1.append( a['href'])
+            else:
+                response = requests.get(url1)
+                soup = BeautifulSoup(response.text, "html.parser")
+                for a in soup.findAll('a', {'class': 'product-name'}):
+                    array1.append( a['href'])
 
-        titletag= request.args.get('titletag')
-        imagetag= request.args.get('imagetag')
-        reftag= request.args.get('reftag')
-        desctag= request.args.get('desctag')
-        for url in array1:
-            response = requests.get(url)
-            prod= []
-            soup = BeautifulSoup(response.text, "html.parser")
-            if(titletag=='id'):
-                prod.append(soup.find(id=request.args.get('title')))
-            elif(titletag=='h1'):
-                prod.append(soup.findAll('h1')[0].text.strip())
-            elif(titletag=='h2'):
-                prod.append(soup.findAll('h2')[0].text.strip())
-            else:
-                prod.append(soup.findAll("div", {"class": request.args.get('title')}))
-            if(reftag=='id'):
-                prod.append(soup.find(id=request.args.get('ref')).text.split(' ')[3])
-            else:
-                prod.append(soup.findAll("div", {"class": request.args.get('ref')}).split(' ')[3])
-            if(imagetag=='id'):
-                prod.append(soup.find(id=request.args.get('image'))['src'])
-            else:
-                prod.append(soup.findAll("div", {"class": request.args.get('image')})['src'])
-            if(desctag=='id'):
-                prod.append(soup.find(id=request.args.get('desc')))
-            else:
-                prod.append(soup.findAll('div',{'class':'rte align_justify'})[0].text.strip())
-            listprod.append(prod)
-        #return render_template('content.html',len=len(listprod),listprod=listprod)
-            imaage=download(prod[2])
-            #jsonprod= {"name": str(prod[0])}
-            jsonprod= {"name": str(prod[0].encode("utf-8")),"reference": str(prod[1]), "images": imaage ,"description": str(prod[3].encode("utf-8")) ,"providers": [str(provider)], "category": [str(cat)],"subcategory": [str(subcat)]}
-            print jsonprod
-            x = db.products.insert_one(jsonprod)
-            print x
+            titletag= request.args.get('titletag')
+            imagetag= request.args.get('imagetag')
+            reftag= request.args.get('reftag')
+            desctag= request.args.get('desctag')
+            for url in array1:
+                response = requests.get(url)
+                prod= []
+                soup = BeautifulSoup(response.text, "html.parser")
+                if(titletag=='id'):
+                    prod.append(soup.find(id=request.args.get('title')))
+                elif(titletag=='h1'):
+                    prod.append(soup.findAll('h1')[0].text.strip())
+                elif(titletag=='h2'):
+                    prod.append(soup.findAll('h2')[0].text.strip())
+                else:
+                    prod.append(soup.findAll("div", {"class": request.args.get('title')}))
+                if(reftag=='id'):
+                    prod.append(soup.find(id=request.args.get('ref')).text.split(' ')[3])
+                else:
+                    prod.append(soup.findAll("div", {"class": request.args.get('ref')}).split(' ')[3])
+                if(imagetag=='id'):
+                    prod.append(soup.find(id=request.args.get('image'))['src'])
+                else:
+                    prod.append(soup.findAll("div", {"class": request.args.get('image')})['src'])
+                if(desctag=='id'):
+                    prod.append(soup.find(id=request.args.get('desc')))
+                else:
+                    prod.append(soup.findAll('div',{'class':'rte align_justify'})[0].text.strip())
+                listprod.append(prod)
+            #return render_template('content.html',len=len(listprod),listprod=listprod)
+                imaage=download(prod[2])
+                #jsonprod= {"name": str(prod[0])}
+                jsonprod= {"name": str(prod[0].encode("utf-8")),"reference": str(prod[1]), "images": imaage ,"description": str(prod[3].encode("utf-8")) ,"providers": [str(provider)], "category": [str(cat)],"subcategory": [str(subcat)]}
+                print jsonprod
+                x = db.products.insert_one(jsonprod)
+                print x
         return render_template('home.html')
 
 
