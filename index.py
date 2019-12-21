@@ -186,11 +186,7 @@ def content():
             if(desctag=='id'):
                 prod.append(soup.find(id=request.args.get('desc')))
             else:
-<<<<<<< HEAD
                 prod.append(soup.findAll('div',{'class':'rte align_justify'})[0].text.strip())
-=======
-                prod.append(soup.findAll('div',{'class':  request.args.get('desc')})[0].text)
->>>>>>> 7d9938398f878d10e683e614f053ebb8674fc811
             listprod.append(prod)
         #return render_template('content.html',len=len(listprod),listprod=listprod)
             imaage=download(prod[2])
