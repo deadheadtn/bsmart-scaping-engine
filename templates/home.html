@@ -7,16 +7,33 @@
     <title>Welcome to BSMART scrapping engine</title>
 
   <!-- Favicon -->
-  <link href="{{ url_for('static', filename = '/assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
+  <link href="https://bsmart.tn/favicon.png" rel="icon" type="image/png">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <!-- Icons -->
   <link href="{{ url_for('static', filename = './assets/js/plugins/nucleo/css/nucleo.css') }}" rel="stylesheet" />
   <link href="{{ url_for('static', filename = './assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
   <!-- CSS Files -->
   <link href="{{ url_for('static', filename = './assets/css/argon-dashboard.css') }}" rel="stylesheet" />
-  <link href="path/to/lightbox.css" rel="stylesheet" />
+  <script>
+      $(document).ready(function() {
+    $('#sitetype').bind('change', function(e) {
+      if ($('#sitetype').val() == 'new') {
+        $("#completedStores").show();
+        $("#notCompletedStores").hide();
+      } else if ($('#store_select').val() == 'notFinished') {
+        $("#completedStores").hide();
+        $("#notCompletedStores").show();
+      } else {
+        $("#completedStores").hide();
+        $("#notCompletedStores").hide();
+      }
+    }).trigger('change');
 
+    });
+  </script>
 </head>
 
 <body>
@@ -48,7 +65,6 @@
           <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <img alt="Image placeholder" src="./assets/img/theme/team-1-800x800.jpg">
               </span>
             </div>
           </a>
@@ -61,7 +77,6 @@
           <div class="row">
             <div class="col-6 collapse-brand">
               <a href="./index.html">
-                <img src="./assets/img/brand/blue.png">
               </a>
             </div>
             <div class="col-6 collapse-close">
@@ -128,11 +143,18 @@
     <div class="row">
       <div class="col-sm">
         <form method="get" action="searchcontent">
-          <h2 class="mb-4 mt-0 text-center">ADD The URL here for tags</h2>
+          <h2 class="mb-4 mt-0 text-center"></h2>
+          <div class="form-group">
+            <label>site</label>
+            <select class="form-control" id="sitetype" name="sitetype">
+              <option value="new">New website</option>
+              <option value="comaf">Comaf</option>
+            </select>
+          </div>
           <div class="form-group">
             <label>Url</label>
             <input class="form-control pb_height-50 reverse" type='text' name='url' value="http://">
-            <input class="form-control pb_height-50 reverse" type='text' name='prodlink' value="a prod class">
+
           </div>
           <div class="form-group">
             <label>pages url</label>
@@ -141,6 +163,11 @@
           <div class="form-group">
             <label>page number</label>
             <input class="form-control pb_height-50 reverse" type='number' name='pagen' value="1">
+          </div>
+          <div id="completedStores">
+          <div class="form-group">
+            <label>Product link</label>
+            <input class="form-control pb_height-50 reverse" type='text' name='prodlink' value="a prod class">
           </div>
           <div class="form-group">
             <label>ref</label>
@@ -175,6 +202,7 @@
               <option>id</option>
               <option>class</option>
             </select>
+            </div>
           </div>
           <div class="form-group">
             <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill  btn-shadow-blue" value="GET">

@@ -88,6 +88,7 @@ def content():
         jsonproviders = json.loads(f.read())
         url1= request.args.get('url')
         pageurl= request.args.get('pageurl')
+        sitetype= request.args.get('sitetype')
         pageN= int(request.args.get('pagen'))
         prodlink= request.args.get('prodlink')
         if (pageN>1):
