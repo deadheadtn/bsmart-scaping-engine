@@ -3,4 +3,4 @@
 pip install flask flask-login requests bs4
 
 Launch 
-pyhthon2 index.py
+python index.py
